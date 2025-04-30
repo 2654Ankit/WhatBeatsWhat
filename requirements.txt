@@ -1,0 +1,12 @@
+langchain
+python-dotenv
+google
+langchain-google-genai
+pandas
+psycopg2-binary
+fastapi 
+uvicorn
+sqlalchemy
+google.generativeai
+jinja2
+redis

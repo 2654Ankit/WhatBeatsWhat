@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What Beats Rock?</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    input { padding: 10px; width: 300px; }
+    button { padding: 10px; }
+    .message { margin-top: 20px; font-size: 18px; }
+
+    /* Loader styles */
+    #loader {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🪨 What Beats {{seed}}? 🎉</h1>
+
+
+  <input type="text" id="guessInput" placeholder="Your Guess...">
+  <button onclick="submitGuess()">Submit</button>
+
+  <!-- Loader Element -->
+  <div id="loader">🧐 Hmm... let me judge that...</div>
+
+  <div class="message" id="message"></div>
+  <div id="history"></div>
+
+  <script>
+    async function submitGuess() {
+        const guess = document.getElementById("guessInput").value;
+        const loader = document.getElementById("loader");
+        const messageDiv = document.getElementById("message");
+        const historyDiv = document.getElementById("history");
+
+        loader.style.display = "block"; // Show loader
+        messageDiv.innerText = "";
+        historyDiv.innerText = "";
+
+        try {
+            const res = await fetch(`/guess?guess=${guess}&persona=serious`, { method: "POST" });
+            const data = await res.json();
+
+            if(data.game_over){
+                messageDiv.innerText = data.message + " 😵‍💫";
+            } else {
+                messageDiv.innerText = data.message + " 🎉";
+                historyDiv.innerText = "History: " + data.history.join(", ");
+            }
+        } catch (error) {
+            messageDiv.innerText = "An error occurred!";
+        } finally {
+            loader.style.display = "none"; // Hide loader
+        }
+    }
+  </script>
+</body>
+</html>
